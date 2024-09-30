@@ -1,11 +1,15 @@
 package br.com.alugames.modelo
 
 import com.google.gson.annotations.Expose
+import javax.persistence.*
 
 data class Jogo(@Expose val titulo: String, @Expose val capa: String): Recomendavel {
     var descricao: String? = null
     var preco = 0.0
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id = 0
+
     private var listaNotas = mutableListOf<Int>()
     override val media: Double
         get() = listaNotas.average()
@@ -15,7 +19,7 @@ data class Jogo(@Expose val titulo: String, @Expose val capa: String): Recomenda
         listaNotas.add(nota)
     }
 
-    constructor(titulo: String, capa: String, preco: Double, descricao: String, id:Int = 0):
+    constructor(titulo: String, capa: String, preco: Double, descricao: String?, id:Int = 0):
             this(titulo, capa) {
         this.preco = preco
         this.descricao = descricao

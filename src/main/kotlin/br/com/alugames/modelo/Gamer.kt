@@ -34,7 +34,7 @@ data class Gamer(var nome: String, var email: String):Recomendavel {
   }
 
 
-  constructor(nome: String, email: String, dataNascimento: String, usuario: String) : this(nome, email) {
+  constructor(nome: String, email: String, dataNascimento: String?, usuario: String?) : this(nome, email) {
     this.dataNascimento = dataNascimento
     this.usuario = usuario
     criarIdInterno()
