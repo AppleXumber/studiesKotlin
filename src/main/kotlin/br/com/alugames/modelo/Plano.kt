@@ -1,7 +1,8 @@
 package br.com.alugames.modelo
 
-abstract class Plano (var tipo:String) {
-  open fun getValor(aluguel: Aluguel): Double {
-    return aluguel.jogo.preco * aluguel.periodo.emDias
-  }
+sealed class Plano(val tipo: String, var id:Int = 0) {
+
+    open fun obterValor(aluguel: Aluguel): Double {
+        return aluguel.jogo.preco * aluguel.periodo.emDias
+    }
 }

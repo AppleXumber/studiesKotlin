@@ -1,21 +1,22 @@
 package br.com.alugames.modelo
 
 import com.google.gson.annotations.Expose
-import javax.persistence.*
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
+import javax.persistence.Table
 
-data class Jogo(@Expose val titulo: String, @Expose val capa: String): Recomendavel {
+data class Jogo(@Expose val titulo:String,
+                @Expose val capa:String): Recomendavel {
     var descricao: String? = null
     var preco = 0.0
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id = 0
-
-    private var listaNotas = mutableListOf<Int>()
+    private val listaNotas = mutableListOf<Int>()
     override val media: Double
         get() = listaNotas.average()
 
     override fun recomendar(nota: Int) {
-        if(nota> 10 || nota < 1) throw Exception("Valor fora do intervalo permitido")
         listaNotas.add(nota)
     }
 
@@ -29,10 +30,9 @@ data class Jogo(@Expose val titulo: String, @Expose val capa: String): Recomenda
         return "Meu Jogo: \n" +
                 "Título: $titulo \n" +
                 "Capa: $capa \n" +
-                "Descricao: $descricao\n" +
-                "Preço: $preco\n" +
+                "Descricao: $descricao \n" +
+                "Preço: $preco \n" +
                 "Reputação: $media\n" +
                 "Id: $id"
     }
-
 }

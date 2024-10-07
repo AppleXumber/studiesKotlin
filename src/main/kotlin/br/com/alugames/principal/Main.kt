@@ -2,48 +2,55 @@ package br.com.alugames.principal
 
 import br.com.alugames.modelo.Gamer
 import br.com.alugames.modelo.Jogo
-import br.com.alugames.servico.ConsumoApi
-import br.com.alugames.utilitario.transformarEmIdade
-import java.util.*
+import br.com.alugames.servicos.ConsumoApi
+import java.util.Scanner
+import tranformarEmIdade
+
 
 fun main() {
-    println("Hello world!")
     val leitura = Scanner(System.`in`)
     val gamer = Gamer.criarGamer(leitura)
-    println("Cadastro concluido. Dados do gamer: $gamer")
-    println("Idade do gamer: " + gamer.dataNascimento?.transformarEmIdade())
+    println("Cadastro concluído com sucesso. Dados do gamer:")
+    println(gamer)
+    println("Idade do gamer: " + gamer.dataNascimento?.tranformarEmIdade())
 
     do {
-        println("Digite o ID para buscar o jogo: ")
+        println("Digite um código de jogo para buscar:")
         val busca = leitura.nextLine()
+
         val buscaApi = ConsumoApi()
-        val informaJogo = buscaApi.buscaJogo(busca)
+        val informacaoJogo = buscaApi.buscaJogo(busca)
+
 
         var meuJogo: Jogo? = null
 
         val resultado = runCatching {
-            meuJogo = Jogo(informaJogo.info.title, informaJogo.info.thumb)
+            meuJogo = Jogo(
+                informacaoJogo.info.title,
+                informacaoJogo.info.thumb
+            )
         }
 
         resultado.onFailure {
-            println("ID inválido, tente novamente")
+            println("Jogo inexistente. Tente outro id.")
         }
 
         resultado.onSuccess {
-            println("Deseja inserir uma descrição personalizada? - S/N")
+            println("Deseja inserir uma descrição personalizada? S/N")
             val opcao = leitura.nextLine()
             if (opcao.equals("s", true)) {
-                println("Insira a descrição para o jogo.")
-                val descricaoText = leitura.nextLine()
-                meuJogo?.descricao = descricaoText
+                println("Insira a descrição personalizado para o jogo:")
+                val descricaoPersonalizada = leitura.nextLine()
+                meuJogo?.descricao = descricaoPersonalizada
             } else {
                 meuJogo?.descricao = meuJogo?.titulo
+
             }
 
             gamer.jogosBuscados.add(meuJogo)
         }
-        println("Deseja buscar um novo jogo? [S/N]")
 
+        println("Deseja buscar um novo jogo? S/N")
         val resposta = leitura.nextLine()
 
     } while (resposta.equals("s", true))
@@ -51,30 +58,33 @@ fun main() {
     println("Jogos buscados:")
     println(gamer.jogosBuscados)
 
-    println("Jogos ordenados por titulo")
-    gamer.jogosBuscados.sortBy{it?.titulo}
+    println("\n Jogos ordenados por título: ")
+    gamer.jogosBuscados.sortBy {
+        it?.titulo
+    }
+
     gamer.jogosBuscados.forEach {
-        println("Titulo: " + it?.titulo)
+        println("Título: " + it?.titulo)
     }
 
     val jogosFiltrados = gamer.jogosBuscados.filter {
-        it?.titulo?.contains("Batman", true) ?: false
+        it?.titulo?.contains("batman", true) ?: false
     }
+    println("\n Jogos filtrados: ")
+    println(jogosFiltrados)
 
-    println("Jogos do batman: $jogosFiltrados")
-
-    println("Deseja excluir algum jogo da lista original?")
+    println("Deseja excluir algum jogo da lista original? S/N")
     val opcao = leitura.nextLine()
-    if(opcao.equals("s", true)) {
+    if (opcao.equals("s", true)) {
         println(gamer.jogosBuscados)
-        println("Informe a posição do jogo que deseja excluir:")
-        val posicao = leitura.nextInt()
+        println("\nInforme a posição do jogo que deseja excluir: ")
+        val posicao =leitura.nextInt()
         gamer.jogosBuscados.removeAt(posicao)
     }
 
-    println("Lista atualizada:")
-    println("Jogos buscados: ${gamer.jogosBuscados}")
+    println("\n Lista atualizada:")
+    println(gamer.jogosBuscados)
 
     println("Busca finalizada com sucesso.")
-}
 
+}

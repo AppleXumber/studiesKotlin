@@ -1,14 +1,17 @@
 package br.com.alugames.dados
 
 import br.com.alugames.modelo.Jogo
+import br.com.alugames.utilitario.toEntity
+import br.com.alugames.utilitario.toModel
 import javax.persistence.EntityManager
 
-class JogosDAO(maneger: EntityManager): DAO<Jogo, JogoEntity>(maneger, JogoEntity::class.java) {
-  override fun toEntity(objeto: Jogo) : JogoEntity {
-    return JogoEntity(objeto.titulo, objeto.capa, objeto.preco, objeto.descricao, objeto.id)
+class JogosDAO(manager: EntityManager) : DAO<Jogo, JogoEntity>(manager, JogoEntity::class.java) {
+
+  override fun toEntity(objeto: Jogo): JogoEntity {
+    return objeto.toEntity()
   }
 
   override fun toModel(entity: JogoEntity): Jogo {
-    return Jogo(entity.titulo, entity.capa, entity.preco, entity.descricao, entity.id)
+    return entity.toModel()
   }
 }
